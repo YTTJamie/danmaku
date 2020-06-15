@@ -66,9 +66,8 @@ danmaku.addImgMessages({
 #### 暂停 - danmaku.pause()
 用于暂停动画
 
-
 ---------
-#### 开发步骤
+## 开发步骤
 1、本地调试：`npm run start`
 
 1、本地测试：`npm run dev`
