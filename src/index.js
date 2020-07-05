@@ -1,5 +1,4 @@
 import Danmaku from './Danmaku'
-import { DanmakuPool } from './DanmakuPool'
 import { DanmaTrack } from './DanmaTrack'
 import createHiDPICanvas from './utils/HiDPICanvas'
 import TextMessage from './MessageImpl/TextMessage'
@@ -19,6 +18,7 @@ export default class DanmakuWrap {
     }
     this.options = {...defaultOptions, ...options};
     this.init();
+    console.log("DanmakuWrap -> constructor -> this.options", this.options)
   }
   init(){
     // 获取父级容器
@@ -52,15 +52,14 @@ export default class DanmakuWrap {
     // 初始化弹幕容器
     this.danmaku = new Danmaku(this.canvas, {
       width: this.parent.clientWidth,
-      height: this.parent.clientHeight
+      height: this.parent.clientHeight,
+      speed: this.options.speed,
     })
 
-    // 创建一个消息池子，池子得大小能容纳300条消息
-    this.danmuPool = new DanmakuPool(300)
     let trackLen = Math.floor(this.parent.clientHeight/(this.options.fontSize + 16));
     let trackArr = Array.from(Array(trackLen),(v, k) => k)
     trackArr.forEach((item,index)=>{
-      let danmuTrack = new DanmaTrack(this.danmuPool, {
+      let danmuTrack = new DanmaTrack({
         top: (this.options.fontSize + 16) * index + 10,
         height: this.options.fontSize + 16
       })
@@ -77,9 +76,14 @@ export default class DanmakuWrap {
   pause(){
     this.danmaku.pause()
   }
-  // 关闭
-  close(){
-    this.danmaku.pause()
+  // 重新播放
+  play(){
+    this.canvas.style.display= 'block';
+    this.danmaku.play();
+  } 
+  // 销毁
+  destroy(){
+    this.danmaku.destroy()
     this.canvas.style.display= 'none';
   }
 
@@ -92,7 +96,7 @@ export default class DanmakuWrap {
     }else{
       messageData.push(this.createMessage(message,'text'));
     }
-    this.danmuPool.addMessages(messageData)
+    this.danmaku.addMessages(messageData)
   }
 
   addImgMessages(message){
@@ -104,7 +108,7 @@ export default class DanmakuWrap {
     }else{
       messageData.push(this.createMessage(message,'img'));
     }
-    this.danmuPool.addMessages(messageData)
+    this.danmaku.addMessages(messageData)
   }
   createMessage(message,type){
     if(type === 'img'){ // 图片

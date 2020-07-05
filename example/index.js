@@ -11,16 +11,17 @@ class Demo extends React.Component {
       cnt: 1,
     };
     this.imgArr = [{
-      text: `你好啊<img src="https://avatars1.githubusercontent.com/u/28089496?s=60&v=4" /><img src="https://avatars1.githubusercontent.com/u/28089496?s=60&v=4" />哈哈哈`
+      text: `你好啊 <img src="https://avatars1.githubusercontent.com/u/28089496?s=60&v=4" /><img src="https://avatars1.githubusercontent.com/u/28089496?s=60&v=4" /> 哈哈哈`
     }];
   }
 
   componentDidMount () {
     this.danmaku = new Danmaku({
       fontSize: 16,
-      container: 'box'
+      container: 'box',
+      speed:70,
     })
-    this.danmaku.start()
+    this.danmaku.play();
     this.danmaku.addTextMessages(example.concat(this.imgArr));
   }
 
@@ -51,6 +52,9 @@ class Demo extends React.Component {
   start=()=>{
     this.danmaku.start();
   }
+  play=()=>{
+    this.danmaku.play();
+  }
   render(){
     return (
       <>
@@ -61,6 +65,7 @@ class Demo extends React.Component {
         <div><a href="javascript:;" className="add-btn" onClick={this.addImg}>新增一个图片</a></div>
         <div><a href="javascript:;" className="add-btn" onClick={this.pause}>暂停</a></div>
         <div><a href="javascript:;" className="add-btn" onClick={this.start}>开始</a></div>
+        <div><a href="javascript:;" className="add-btn" onClick={this.play}>重新开始</a></div>
       </>
     );
   }
